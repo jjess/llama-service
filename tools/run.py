@@ -53,6 +53,16 @@ ARG_SPEC = [
     ("bool", "LLAMA_CACHE_PROMPT", "--cache-prompt"),
     ("value", "LLAMA_SLOT_SAVE_PATH", "--slot-save-path"),
     ("value", "LLAMA_DEFRAG_THOLD", "--defrag-thold"),
+    # Speculative decoding parameters
+    ("value", "LLAMA_SPEC_TYPE", "--spec-type"),
+    ("value", "LLAMA_SPEC_DRAFT_N_MAX", "--spec-draft-n-max"),
+    # Sampling parameters
+    ("value", "LLAMA_TEMP", "--temp"),
+    ("value", "LLAMA_TOP_P", "--top-p"),
+    ("value", "LLAMA_TOP_K", "--top-k"),
+    ("value", "LLAMA_MIN_P", "--min-p"),
+    ("value", "LLAMA_PRESENCE_PENALTY", "--presence-penalty"),
+    ("value", "LLAMA_REPEAT_PENALTY", "--repeat-penalty"),
 ]
 
 
