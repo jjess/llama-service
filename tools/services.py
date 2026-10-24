@@ -58,7 +58,8 @@ def _state_color(active, sub, loaded):
     return None
 
 CORE_PATTERNS = ["llama-server@*.service"]
-TIMER_PATTERNS = ["llama-server-restart@*.service", "llama-server-restart@*.timer"]
+TIMER_PATTERNS = ["llama-server-restart@*.service", "llama-server-restart@*.timer",
+                  "llama-server-rmrestart@*.service", "llama-server-rmrestart@*.timer"]
 REPORT_PATTERNS = ["llama-mem-report.service"]
 ALL_PATTERNS = CORE_PATTERNS + TIMER_PATTERNS + REPORT_PATTERNS
 
@@ -132,7 +133,7 @@ def _build_catalog():
     for name, _desc in list_presets():
         add(f"llama-server@{name}.service", name, 0)
 
-    for unit in sorted(u for u in loaded if u.startswith("llama-server-restart")):
+    for unit in sorted(u for u in loaded if u.startswith("llama-server-restart") or u.startswith("llama-server-rmrestart")):
         add(unit, unit, 1)
 
     for unit in sorted(u for u in loaded if u.startswith("llama-mem-report")):

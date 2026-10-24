@@ -22,10 +22,14 @@ TEMPLATE_SRC = DEPLOY_DIR / "llama-server@.service"
 LOGROTATE_SRC = DEPLOY_DIR / "llama-server.logrotate"
 RESTART_TEMPLATE_SERVICE_SRC = DEPLOY_DIR / "llama-server-restart@.service"
 RESTART_TEMPLATE_TIMER_SRC = DEPLOY_DIR / "llama-server-restart@.timer"
+RMRESTART_TEMPLATE_SERVICE_SRC = DEPLOY_DIR / "llama-server-rmrestart@.service"
+RMRESTART_TEMPLATE_TIMER_SRC = DEPLOY_DIR / "llama-server-rmrestart@.timer"
 TEMPLATE_DEST = "/etc/systemd/system/llama-server@.service"
 LOGROTATE_DEST = "/etc/logrotate.d/llama-server"
 RESTART_TEMPLATE_SERVICE_DEST = "/etc/systemd/system/llama-server-restart@.service"
 RESTART_TEMPLATE_TIMER_DEST = "/etc/systemd/system/llama-server-restart@.timer"
+RMRESTART_TEMPLATE_SERVICE_DEST = "/etc/systemd/system/llama-server-rmrestart@.service"
+RMRESTART_TEMPLATE_TIMER_DEST = "/etc/systemd/system/llama-server-rmrestart@.timer"
 
 # Units an older clone of this repo may have installed that no longer exist
 # here -- init offers to remove them (see "Migrating off llama-server.service"
@@ -47,7 +51,7 @@ def _run(cmd, dry_run):
 
 
 def run(args):
-    required = [TEMPLATE_SRC, LOGROTATE_SRC, RESTART_TEMPLATE_SERVICE_SRC, RESTART_TEMPLATE_TIMER_SRC]
+    required = [TEMPLATE_SRC, LOGROTATE_SRC, RESTART_TEMPLATE_SERVICE_SRC, RESTART_TEMPLATE_TIMER_SRC, RMRESTART_TEMPLATE_SERVICE_SRC, RMRESTART_TEMPLATE_TIMER_SRC]
     for src in required:
         if not src.is_file():
             die(f"missing {src.relative_to(REPO_ROOT)}")
@@ -57,6 +61,8 @@ def run(args):
         (LOGROTATE_SRC, LOGROTATE_DEST),
         (RESTART_TEMPLATE_SERVICE_SRC, RESTART_TEMPLATE_SERVICE_DEST),
         (RESTART_TEMPLATE_TIMER_SRC, RESTART_TEMPLATE_TIMER_DEST),
+        (RMRESTART_TEMPLATE_SERVICE_SRC, RMRESTART_TEMPLATE_SERVICE_DEST),
+        (RMRESTART_TEMPLATE_TIMER_SRC, RMRESTART_TEMPLATE_TIMER_DEST),
     ]
 
     stale = [dest for dest in RETIRED_UNIT_DESTS if os.path.exists(dest)]
@@ -83,8 +89,8 @@ def run(args):
     print("It will NOT start or enable any service -- every preset runs as")
     print("its own named service now, so there's no single default to enable.")
     print("It will NOT touch user/group membership (see README.md for")
-    print("Vulkan/render group setup). The periodic-restart timer is")
-    print("installed but left disabled -- opt in per-preset (see 'Next' below).")
+    print("Vulkan/render group setup). The periodic-restart timers (daily +")
+    print("low-RAM) are installed but left disabled -- opt in per-preset (see 'Next' below).")
     print()
 
     if not args.dry_run and not args.yes:
@@ -105,8 +111,8 @@ def run(args):
     print("  ./llama-tool.py models download <org>/<repo> <file.gguf>")
     print("  ./llama-tool.py services enable <preset> --now")
     print()
-    print("That last step also arms the preset's daily 03:00 restart timer")
-    print("(clears accumulated memory) in the same call -- see")
+    print("That last step also arms the preset's timers (daily 03:00 and")
+    print("low-RAM checks) in the same call -- see")
     print("`llama-tool.py services --help` / README.md's 'Debugging / status'.")
 
 

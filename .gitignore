@@ -23,3 +23,7 @@ models/
 
 # Real secrets for systemd's EnvironmentFile= (see deploy/llama-server.env.example)
 deploy/llama-server.env
+
+.prompts/
+
+

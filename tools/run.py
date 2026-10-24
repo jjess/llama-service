@@ -63,6 +63,8 @@ ARG_SPEC = [
     ("value", "LLAMA_MIN_P", "--min-p"),
     ("value", "LLAMA_PRESENCE_PENALTY", "--presence-penalty"),
     ("value", "LLAMA_REPEAT_PENALTY", "--repeat-penalty"),
+    # Idle-timeout: idle the server after N seconds of no requests
+    ("value", "LLAMA_SLEEP_IDLE_SECONDS", "--sleep-idle-seconds"),
 ]
 
 

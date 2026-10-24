@@ -1,0 +1,10 @@
+[Unit]
+Description=Low-free-RAM restart of llama-server@%i
+After=network.target
+
+[Service]
+Type=oneshot
+RuntimeDirectory=llama-service-rmrestart
+EnvironmentFile=-/opt/llama-service/llama.env
+EnvironmentFile=-/opt/llama-service/deploy/llama-server.env
+ExecStart=/usr/bin/env python3 /opt/llama-service/scripts/llama_ram_restart_check.py %i
